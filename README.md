@@ -1,3 +1,13 @@
+# CREDERE 2 sided Login and Auth attempt, a multi-user authentication approach
+
+In this case I am trying the **Supabase Custom claims approach**
+
+I want to create a NEXT APP with Supabase where I can have 2 types of users to Logged in: 
+- For Broker that are on our platform and could sign up to the platform in order to have **(1)** a website and presence online and **(2)** a better way to manage their leads online
+- For Users that are looking for a mortgage in the marketplace and want to get a better deal on their mortgage
+
+## Creating a NEXT JS APP
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
@@ -12,27 +22,63 @@ yarn dev
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Connecting to your Supabase backend
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+You will need to create your backend to test it out
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## Set things with the User Management Starter
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```
+-- Create a table for public profiles
+create table profiles (
+  id uuid references auth.users on delete cascade not null primary key,
+  updated_at timestamp with time zone,
+  username text unique,
+  full_name text,
+  avatar_url text,
+  website text,
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+  constraint username_length check (char_length(username) >= 3)
+);
+-- Set up Row Level Security (RLS)
+-- See https://supabase.com/docs/guides/auth/row-level-security for more details.
+alter table profiles
+  enable row level security;
 
-## Learn More
+create policy "Public profiles are viewable by everyone." on profiles
+  for select using (true);
 
-To learn more about Next.js, take a look at the following resources:
+create policy "Users can insert their own profile." on profiles
+  for insert with check (auth.uid() = id);
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+create policy "Users can update own profile." on profiles
+  for update using (auth.uid() = id);
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+-- This trigger automatically creates a profile entry when a new user signs up via Supabase Auth.
+-- See https://supabase.com/docs/guides/auth/managing-user-data#using-triggers for more details.
+create function public.handle_new_user()
+returns trigger as $$
+begin
+  insert into public.profiles (id, full_name, avatar_url)
+  values (new.id, new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'avatar_url');
+  return new;
+end;
+$$ language plpgsql security definer;
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
 
-## Deploy on Vercel
+-- Set up Storage!
+insert into storage.buckets (id, name)
+  values ('avatars', 'avatars');
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+-- Set up access controls for storage.
+-- See https://supabase.com/docs/guides/storage#policy-examples for more details.
+create policy "Avatar images are publicly accessible." on storage.objects
+  for select using (bucket_id = 'avatars');
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+create policy "Anyone can upload an avatar." on storage.objects
+  for insert with check (bucket_id = 'avatars');
+
+```
+
