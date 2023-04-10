@@ -7,6 +7,7 @@ I want to create a NEXT APP with Supabase where I can have 2 types of users to L
 - For Users that are looking for a mortgage in the marketplace and want to get a better deal on their mortgage
 
 We want to implement 2 flows: 
+
 (1) The Broker flow
   - Log in
   - Dashboard for the broker
