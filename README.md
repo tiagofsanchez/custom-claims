@@ -6,6 +6,21 @@ I want to create a NEXT APP with Supabase where I can have 2 types of users to L
 - For Broker that are on our platform and could sign up to the platform in order to have **(1)** a website and presence online and **(2)** a better way to manage their leads online
 - For Users that are looking for a mortgage in the marketplace and want to get a better deal on their mortgage
 
+We want to implement 2 flows: 
+(1) The Broker flow
+  - Log in
+  - Dashboard for the broker
+  - Details page to fill in
+  - Existing leads
+
+(2) The Client flow  
+  - Log in
+  - Dashboard
+  - Details page
+  - Simulation
+  - Effort rate
+  - select your broker
+
 ## Creating a NEXT JS APP
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
@@ -82,3 +97,18 @@ create policy "Anyone can upload an avatar." on storage.objects
 
 ```
 
+## Set up the Custom-Claims
+
+As per [Supabase Custom Claims](https://github.com/supabase-community/supabase-custom-claims) s
+
+
+
+## Use the AUTH UI 
+
+As per [Supabase AUTH UI documentation](https://supabase.com/docs/guides/auth/auth-helpers/auth-ui)
+
+
+**Things that I need to do and solve for:**
+- Have a way to toggle between the logins so that the user can be "recorded" with a certain `userrole`
+- Every time the user is logged in and there is a session how can I check role for the user so that my client side is different? There is the `get_my_claims` function that can be call to know that... but what would be the best way to get that detail? 
+- How would I get my relationship between Broker and Client in a way that Broker can have multiple Clients, but the Client only can have one selected Broker? 
