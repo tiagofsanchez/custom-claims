@@ -1,3 +1,43 @@
+# The Flow
+
+This will explain what I am trying to do for the app that I am building
+There are 2 types of users that can login to my app: 
+- Brokers (that will be helping users to get their mortgage or renew it)
+- Users (that will need help with regards to their mortgage)
+
+## Login for the first time
+
+There is a Login (`/login`) page and the user will be able to select if he is a User or Broker and he will login to the app for the first time. 
+Depending on what the user selects he will be `tagged` with `userrole` of type `Broker` or `User` to differentiate the user. 
+
+**THERE ARE BIG QUESTIONS HERE:** 
+- Do I need to user to be `claims_admin: true`? How do I attribute the `userrole` in the moment that the user login for the first time? I do want to do that from the client side and not from my SQL editor by hand.
+- How do I know the `userole` the moment the user login for the first time or the second time? 
+- In case I use the `custom-claims` approach, how do I programmatically create a profile_broker and profile_user so that I can establish the relationship between both? 
+
+## When the user is logged in, after the user logs in
+
+When the user is authenticated he will be able to access his part of the web app, for example
+- If you are **Broker**: 
+  - /broker/dashboard
+  - /broker/about
+  - /broker/leads
+  - ...
+
+- If you are the **Customer**: 
+  - /client/dashboard
+  - /client/about
+  - /client/simulation
+  - /client/effort-rate
+  - ...
+
+## There are 2 major problems to solve with this flow
+
+We have 2 problems: 
+(1) Anytime a non-authenticated user tries to access a "protected route" he will not be able to do so and will be routed to the `/`login` page.
+(2) If a **Broker** tries to access a route for a **User** he will not be able to and will be shown a `403 - Unauthorized Page`. The same behavior will be expected of the **User**.
+
+
 # CREDERE 2 sided Login and Auth attempt, a multi-user authentication approach
 
 In this case I am trying the **Supabase Custom claims approach**
@@ -100,16 +140,14 @@ create policy "Anyone can upload an avatar." on storage.objects
 
 ## Set up the Custom-Claims
 
-As per [Supabase Custom Claims](https://github.com/supabase-community/supabase-custom-claims) s
-
-
+As per [Supabase Custom Claims](https://github.com/supabase-community/supabase-custom-claims) 
 
 ## Use the AUTH UI 
 
 As per [Supabase AUTH UI documentation](https://supabase.com/docs/guides/auth/auth-helpers/auth-ui)
 
 
-**Things that I need to do and solve for:**
+## Things that I need to do and solve for 
 - Have a way to toggle between the logins so that the user can be "recorded" with a certain `userrole`
 - Every time the user is logged in and there is a session how can I check role for the user so that my client side is different? There is the `get_my_claims` function that can be call to know that... but what would be the best way to get that detail? 
 - How would I get my relationship between Broker and Client in a way that Broker can have multiple Clients, but the Client only can have one selected Broker? 
