@@ -144,7 +144,11 @@ As per [Supabase Custom Claims](https://github.com/supabase-community/supabase-c
 
 ## Use the AUTH UI 
 
+**NOTE:** 
+I was not able to use AUTH UI to set up custom-claims when the user signs up for the first time! 
+
 As per [Supabase AUTH UI documentation](https://supabase.com/docs/guides/auth/auth-helpers/auth-ui)
+
 
 
 ## Things that I need to do and solve for 
