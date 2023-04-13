@@ -13,6 +13,22 @@ function Home({ userClaims }) {
 
   console.log({ userData, userSession, userClaims });
 
+  const handleAuthStateChange = async (event, session) => {
+    console.log({event, session})
+    const uid = session.user.id
+    if (event === 'SIGNED_IN') {
+      // Add custom claim to user's JWT
+      const { error } = await supabase.rpc('set_claim', {uid, userrole, Broker});
+
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Custom claim added to user JWT');
+      }
+    }
+  };
+
+
   return (
     <main className="  p-20 grid gap-10">
       <h1 className="text-5xl text-center">
@@ -26,6 +42,9 @@ function Home({ userClaims }) {
               supabaseClient={supabase}
               appearance={{ theme: ThemeSupa }}
               providers={[]}
+              onAuthStateChange={handleAuthStateChange}
+
+              // callbackUrl={`${window.location.origin}/callback`}
             />
           </div>
         </>
