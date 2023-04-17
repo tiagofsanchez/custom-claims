@@ -23,7 +23,7 @@ function Home({ userClaims }) {
   }, [userSession, router]);
 
   return (
-    <main className="  p-20 grid gap-10">
+    <main className="p-20 grid gap-10">
       <h1 className="text-5xl text-center">
         This is a test for credere 2sided login and Auth
       </h1>
@@ -36,9 +36,6 @@ function Home({ userClaims }) {
           providers={[]}
         />
       </div>
-      {/* {userSession ? (
-        <button onClick={() => supabase.auth.signOut()}> Sign out</button>
-      ) : null} */}
     </main>
   );
 }
