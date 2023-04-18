@@ -4,12 +4,23 @@ import {
   useUser,
 } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 const WelcomePage = () => {
   const userData = useUser();
   const userSession = useSession();
   const supabase = useSupabaseClient();
   const router = useRouter();
+
+  console.log({ userData, userSession });
+
+  useEffect(() => {
+    if (userData?.app_metadata.userrole == "Broker") {
+      void router.replace("/broker-dashboard");
+    } else if (userData?.app_metadata.userrole == "Customer") {
+      void router.replace("/customer-dashboard");
+    }
+  }, [userData, router]);
 
   async function updateProfileAsBroker() {
     try {
@@ -27,7 +38,21 @@ const WelcomePage = () => {
     }
   }
 
-  console.log({ userData, userSession });
+  async function updateProfileAsCustomer() {
+    try {
+      const updates = {
+        uid: userData.id,
+        claim: "userrole",
+        value: "Customer",
+      };
+      let { error, data } = await supabase?.rpc("set_claim", { ...updates });
+      if (error) throw error;
+      console.log({ data, updates });
+    } catch (error) {
+      alert(JSON.stringify(error, null, 2));
+      console.log({ error, updates });
+    }
+  }
 
   const signOutHandler = () => {
     supabase.auth.signOut();
@@ -44,8 +69,11 @@ const WelcomePage = () => {
         >
           as Broker
         </button>
-        <button className="bg-transparent hover:bg-blue-500 font-semibold hover:text-white py-2 px-4 border border-white hover:border-transparent rounded">
-          as Client
+        <button
+          className="bg-transparent hover:bg-blue-500 font-semibold hover:text-white py-2 px-4 border border-white hover:border-transparent rounded"
+          onClick={updateProfileAsCustomer}
+        >
+          as Customer
         </button>
       </div>
       <button

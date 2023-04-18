@@ -41,23 +41,24 @@ Depending on what the user selects he will be `tagged` with `userrole` of type `
 - ✅ How do I know the `userrole` the moment the user login for the first time or the second time? I would know that via `useUser` on the `app_metadata` property
 - DATABASE QUESTION: In case I use the `custom-claims` approach, how do I programmatically create a profile_broker and profile_user so that I can establish the relationship between both? (here I can do what I am currently doing by having the flow that I have on the `main`) 
 - NEXTJS QUESTION: How do I protect my routes with the middleware given that I have 2 types of users? 
+- SUPABASE QUESTION: when I delete a claims I still get it on my userData and when I updated it it takes time to see that on the client side.
 
 ## When the user is logged in, after the user logs in
 
 When the user is authenticated he will be able to access his part of the web app, for example
 - If you are **Broker**: 
   - /welcome (page where the user will select if he is a Broker or not)
-  - /broker/dashboard 
-  - /broker/about
-  - /broker/leads
+  - /broker-dashboard 
+  - /broker-about
+  - /broker-leads
   - ...
 
 - If you are the **Customer**: 
   - /welcome (page where the user will select if he is a Customer or not)
-  - /client/dashboard
-  - /client/about
-  - /client/simulation
-  - /client/effort-rate
+  - /client-dashboard
+  - /client-about
+  - /client-simulation
+  - /client-effort-rate
   - ...
 
 ## There are 2 major problems to solve with this flow

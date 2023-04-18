@@ -17,10 +17,14 @@ function Home({ userClaims }) {
   console.log({ userData, userSession, userClaims });
 
   useEffect(() => {
-    if (userSession) {
+    if (userData?.app_metadata.userrole == "Broker") {
+      void router.replace("/broker-dashboard");
+    } else if (userData?.app_metadata.userrole == "Customer") {
+      void router.replace("/customer-dashboard");
+    } else if (userSession) {
       void router.replace("/welcome");
     }
-  }, [userSession, router]);
+  }, [userData, userSession, router]);
 
   return (
     <main className="p-20 grid gap-10">
