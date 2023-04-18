@@ -43,6 +43,7 @@ Depending on what the user selects he will be `tagged` with `userrole` of type `
 - NEXTJS QUESTION: How do I protect my routes with the middleware given that I have 2 types of users? 
 - SUPABASE QUESTION: when I delete a claims I still get it on my userData and when I updated it it takes time to see that on the client side.
 
+
 ## When the user is logged in, after the user logs in
 
 When the user is authenticated he will be able to access his part of the web app, for example
