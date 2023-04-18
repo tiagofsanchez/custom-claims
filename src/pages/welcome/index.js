@@ -3,7 +3,6 @@ import {
   useSupabaseClient,
   useUser,
 } from "@supabase/auth-helpers-react";
-import { requestToBodyStream } from "next/dist/server/body-streams";
 import { useRouter } from "next/router";
 
 const WelcomePage = () => {
@@ -16,10 +15,10 @@ const WelcomePage = () => {
     try {
       const updates = {
         uid: userData.id,
-        // claim: "userrole",
-        // value: "Broker",
+        claim: "userrole",
+        value: "Broker",
       };
-      let { error, data } = await supabase?.rpc('get_claims', {...updates});
+      let { error, data } = await supabase?.rpc("set_claim", { ...updates });
       if (error) throw error;
       console.log({ data, updates });
     } catch (error) {

@@ -12,8 +12,9 @@ Depending on what the user selects he will be `tagged` with `userrole` of type `
 
 **THERE ARE BIG QUESTIONS HERE:** 
 - Do I need to user to be `claims_admin: true`? How do I attribute the `userrole` in the moment that the user login for the first time? I do want to do that from the client side and not from my SQL editor by hand.
-- How do I know the `userole` the moment the user login for the first time or the second time? 
-- In case I use the `custom-claims` approach, how do I programmatically create a profile_broker and profile_user so that I can establish the relationship between both? 
+- How do I know the `userrole` the moment the user login for the first time or the second time? 
+- In case I use the `custom-claims` approach, how do I programmatically create a profile_broker and profile_user so that I can establish the relationship between both? (here I can do what I am currently doing by having the flow that I have on the `main`)
+- How do I protect my routes with the middleware given that I have 2 types of users? 
 
 ## When the user is logged in, after the user logs in
 
